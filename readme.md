@@ -9,8 +9,8 @@ That is all. :)
 
 Basic Controls
 
-w -> move forward
-a -> rotate left
-s -> move backward
-d -> rotate right
+w -> move forward\
+a -> rotate left\
+s -> move backward\
+d -> rotate right\
 f -> fire bullets

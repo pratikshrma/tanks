@@ -19,6 +19,7 @@ class Wall extends GameEntity {
 		const geometry = new BoxGeometry(1, 1, 1);
 		const material = new MeshStandardMaterial({
 			map: ResourceManager.instance.getTexture("wall"),
+			// wireframe: true,
 		});
 		this._mesh = new Mesh(geometry, material);
 

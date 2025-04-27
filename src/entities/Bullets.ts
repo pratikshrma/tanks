@@ -9,6 +9,7 @@ import {
 } from "three";
 import GameEntity from "./GameEntity";
 import GameScene from "../scene/GameScene";
+import ExplosionEffect from "../effects/ExplosionEffect";
 
 class Bullet extends GameEntity {
 	private _angle: number;
@@ -31,7 +32,7 @@ class Bullet extends GameEntity {
 	};
 
 	//update method
-	public update = (deltaT: number) => {
+	public update = async (deltaT: number) => {
 		const traveSpeed = 9;
 		const computedMovement = new Vector3(
 			traveSpeed * Math.sin(this._angle) * deltaT,
@@ -52,6 +53,17 @@ class Bullet extends GameEntity {
 		);
 
 		if (collider.length) {
+			//just before disposing it add that effect
+			const explosionEffect = new ExplosionEffect(
+				this._mesh.position,
+				0.1
+			);
+			await explosionEffect.load().then(() => {
+				GameScene.instance.addToScene(explosionEffect);
+			});
+
+			console.log("Should load the smoke effect now");
+
 			this._shouldDispose = true;
 		}
 	};

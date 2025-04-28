@@ -11,6 +11,7 @@ import GameMap from "../map/GameMap";
 import ResourceManager from "../utils/ResourceManager";
 import PlayerTank from "../entities/PlayerTank";
 import Wall from "../map/Wall";
+import EnemyTank from "../entities/EnemyTank";
 
 export default class GameScene {
 	private static _instance = new GameScene();
@@ -76,6 +77,9 @@ export default class GameScene {
 
 		const playerTank = new PlayerTank(new Vector3(7, 7, 0));
 		this._gameEntities.push(playerTank);
+
+		const enemyTank = new EnemyTank(new Vector3(3, 3, 0));
+		this._gameEntities.push(enemyTank);
 
 		this.createWalls();
 	}

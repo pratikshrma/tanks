@@ -40,16 +40,29 @@ class ResourceManager {
 	};
 
 	private loadTextures = async (textureLoader: TextureLoader) => {
+		//Player Tank
 		const tankBodyTexture = await textureLoader.loadAsync(
 			"textures/tank-body.png"
 		);
 		const tankTurretTexture = await textureLoader.loadAsync(
 			"textures/tank-turret.png"
 		);
-
 		//add this to the game resources
 		this._textures.set("tank-body", tankBodyTexture);
 		this._textures.set("tank-turret", tankTurretTexture);
+
+		//Enemy Tank
+		const tankBodyTextureRed = await textureLoader.loadAsync(
+			"textures/tank-body-red.png"
+		);
+		const tankTurretTextureRed = await textureLoader.loadAsync(
+			"textures/tank-turret-red.png"
+		);
+		//add this to the game resources
+		this._textures.set("tank-body", tankBodyTexture);
+		this._textures.set("tank-turret", tankTurretTexture);
+		this._textures.set("tank-body-red", tankBodyTextureRed);
+		this._textures.set("tank-turret-red", tankTurretTextureRed);
 
 		//walls
 		const wallTexture = await textureLoader.loadAsync("textures/wall.png");

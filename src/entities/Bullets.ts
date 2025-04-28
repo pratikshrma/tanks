@@ -10,6 +10,7 @@ import {
 import GameEntity from "./GameEntity";
 import GameScene from "../scene/GameScene";
 import ExplosionEffect from "../effects/ExplosionEffect";
+import EnemyTank from "./EnemyTank";
 
 class Bullet extends GameEntity {
 	private _angle: number;
@@ -53,6 +54,7 @@ class Bullet extends GameEntity {
 		);
 
 		if (collider.length) {
+			this._shouldDispose = true;
 			//just before disposing it add that effect
 			const explosionEffect = new ExplosionEffect(
 				this._mesh.position,
@@ -62,9 +64,11 @@ class Bullet extends GameEntity {
 				GameScene.instance.addToScene(explosionEffect);
 			});
 
-			console.log("Should load the smoke effect now");
-
-			this._shouldDispose = true;
+			//is there an enemy amoung the collider
+			const enemies = collider.filter((c) => c.entityType === "enemy");
+			if (enemies.length) {
+				(enemies[0] as EnemyTank).damage(20);
+			}
 		}
 	};
 

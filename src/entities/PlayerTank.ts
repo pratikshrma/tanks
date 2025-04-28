@@ -99,11 +99,15 @@ class PlayerTank extends GameEntity {
 			throw "Unable to get tank model";
 		}
 
-		const tankBodyMesh = tankModel.scene.children.find(
+		//entities using models will require a unique instance
+
+		const tankSceneData = tankModel.scene.clone();
+
+		const tankBodyMesh = tankSceneData.children.find(
 			(m) => m.name === "Body"
 		) as Mesh;
 
-		const tankTurretMesh = tankModel.scene.children.find(
+		const tankTurretMesh = tankSceneData.children.find(
 			(m) => m.name === "Turret"
 		) as Mesh;
 

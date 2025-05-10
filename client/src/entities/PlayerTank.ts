@@ -4,6 +4,7 @@ import ResourceManager from "../utils/ResourceManager";
 import GameScene from "../scene/GameScene";
 import Bullet from "./Bullets";
 import ShootEffect from "../effects/ShootEffect";
+import { socket } from "../main";
 
 type KeyboardState = {
 	LeftPressed: boolean;
@@ -32,6 +33,11 @@ class PlayerTank extends GameEntity {
 
 	//handle key pressing
 	private handleKeyDown = (e: KeyboardEvent) => {
+		//here add a websocket emit event also
+		socket.emit("client-moved", {
+			id: socket.id,
+			position: this._mesh.position,
+		});
 		switch (e.key) {
 			case "w":
 				this._keyboardState.UpPressed = true;

@@ -12,6 +12,17 @@ import ResourceManager from "../utils/ResourceManager";
 import PlayerTank from "../entities/PlayerTank";
 import Wall from "../map/Wall";
 import EnemyTank from "../entities/EnemyTank";
+import { socket } from "../main";
+import axios from "axios";
+
+interface position {
+	id: number;
+	position: {
+		x: number;
+		y: number;
+		z: number;
+	};
+}
 
 export default class GameScene {
 	private static _instance = new GameScene();
@@ -33,6 +44,8 @@ export default class GameScene {
 	private _clock: Clock = new Clock();
 
 	private _mapSize = 15;
+
+	private _playerCoords: position[] = [];
 
 	//exposing the cameras
 	public get camera() {
@@ -75,14 +88,34 @@ export default class GameScene {
 		const gameMap = new GameMap(new Vector3(0, 0, 0), this._mapSize);
 		this._gameEntities.push(gameMap);
 
-		const playerTank = new PlayerTank(new Vector3(7, 7, 0));
-		this._gameEntities.push(playerTank);
+		// const enemyTank = new EnemyTank(new Vector3(3, 3, 0));
+		// this._gameEntities.push(enemyTank);
 
-		const enemyTank = new EnemyTank(new Vector3(3, 3, 0));
-		this._gameEntities.push(enemyTank);
-
+		this.createTanks();
 		this.createWalls();
 	}
+
+	private createTanks = async () => {
+		console.log("Create tanks funciton triggered");
+		console.log(import.meta.env.VITE_SERVER_DOMAIN);
+
+		//before initialization get get position and id of all the tanks
+		const { data } = await axios.get(
+			`${import.meta.env.VITE_SERVER_DOMAIN}/`
+		);
+		console.log(data.coords);
+		this._playerCoords = data.coords;
+
+		this._playerCoords.map((each) => {
+			console.log(each.position);
+			const playerTank = new PlayerTank(
+				new Vector3(each.position.x, each.position.y, 0)
+			);
+			this._gameEntities.push(playerTank);
+
+			// const playerTank;
+		});
+	};
 
 	private createWalls = () => {
 		const edge = this._mapSize - 1;

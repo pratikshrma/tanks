@@ -1,21 +1,21 @@
 {
-  "name": "tanks",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "typescript": "~5.7.3",
-    "vite": "^6.3.5"
-  },
-  "dependencies": {
-    "@types/three": "^0.175.0",
-    "axios": "^1.9.0",
-    "socket.io-client": "^4.8.1",
-    "three": "^0.176.0"
-  }
+	"name": "tanks",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"typescript": "~5.7.3",
+		"vite": "^6.3.5"
+	},
+	"dependencies": {
+		"@types/three": "^0.175.0",
+		"axios": "^1.9.0",
+		"socket.io-client": "^4.8.1",
+		"three": "^0.176.0"
+	}
 }

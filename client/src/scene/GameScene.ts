@@ -16,11 +16,12 @@ import { socket } from "../main";
 import axios from "axios";
 
 interface position {
-	id: number;
+	id: string;
 	position: {
 		x: number;
 		y: number;
 		z: number;
+		rotation: number;
 	};
 }
 
@@ -88,16 +89,19 @@ export default class GameScene {
 		const gameMap = new GameMap(new Vector3(0, 0, 0), this._mapSize);
 		this._gameEntities.push(gameMap);
 
-		// const enemyTank = new EnemyTank(new Vector3(3, 3, 0));
-		// this._gameEntities.push(enemyTank);
+		const playerTank = new PlayerTank(new Vector3(7, 7, 0));
+		this.gameEntities.push(playerTank);
 
-		this.createTanks();
+		const enemyTank = new EnemyTank(new Vector3(3, 3, 0));
+		this._gameEntities.push(enemyTank);
+
+		// const enemyTank1 = new EnemyTank(new Vector3(3, 7, 0));
+		// this._gameEntities.push(enemyTank1);
 		this.createWalls();
 	}
 
-	private createTanks = async () => {
-		console.log("Create tanks funciton triggered");
-		console.log(import.meta.env.VITE_SERVER_DOMAIN);
+	private createOtherPlayerTanks = async () => {
+		console.log("Create tanks function triggered");
 
 		//before initialization get get position and id of all the tanks
 		const { data } = await axios.get(
@@ -105,16 +109,22 @@ export default class GameScene {
 		);
 		console.log(data.coords);
 		this._playerCoords = data.coords;
+		this._playerCoords = this._playerCoords.filter(
+			(player) => player.id !== socket.id
+		);
 
-		this._playerCoords.map((each) => {
-			console.log(each.position);
-			const playerTank = new PlayerTank(
-				new Vector3(each.position.x, each.position.y, 0)
+		for (const each of this._playerCoords) {
+			console.log(each);
+			const enemyTank = new EnemyTank(
+				new Vector3(each.position.x, each.position.y, 0),
+				each.position.rotation
 			);
-			this._gameEntities.push(playerTank);
-
-			// const playerTank;
-		});
+			await enemyTank.load();
+			// // GameScene.instance.addToScene(enemyTank);
+			// this._gameEntities.push(enemyTank);
+			this._scene.add(enemyTank.mesh);
+		}
+		console.log(GameScene.instance.gameEntities);
 	};
 
 	private createWalls = () => {
@@ -160,6 +170,8 @@ export default class GameScene {
 			await element.load();
 			this._scene.add(element.mesh);
 		}
+
+		await this.createOtherPlayerTanks();
 
 		//add light to the scene
 		const light = new HemisphereLight(0xffffff, 0x080820, 1);

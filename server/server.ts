@@ -41,18 +41,18 @@ app.get("/flush", async (req: Request, res: Response) => {
 
 io.on("connection", (socket) => {
 	console.log("A user Connected", socket.id);
-	socket.emit("welcome", `Welcome User ${socket.id}`);
+	// socket.emit("new-player", async () => {
+	// const postion;
+	// });
+
 	socket.on("client-moved", async (data) => {
 		console.log(data.id, " tank moved", Math.random());
 		const result = await client.hSet(data.id, data.position);
 		console.log(result);
-		// socket.broadcast.emit("send-movement", {
-		// 	id: data.id,
-		// 	message: "This tank is moving",
-		// });
 	});
 
 	socket.on("disconnect", async () => {
+		console.log(socket.id, " disconnected");
 		await client.del(socket.id);
 	});
 });

@@ -14,7 +14,7 @@ type KeyboardState = {
 };
 
 class PlayerTank extends GameEntity {
-	private _rotation: number = 0;
+	private _rotation: number;
 
 	private _keyboardState: KeyboardState = {
 		LeftPressed: false,
@@ -23,8 +23,9 @@ class PlayerTank extends GameEntity {
 		UpPressed: false,
 	};
 
-	constructor(position: Vector3) {
+	constructor(position: Vector3, rotation: number = 0) {
 		super(position, "player");
+		this._rotation = rotation;
 
 		//listen to the methods that track keyboard state
 		window.addEventListener("keydown", this.handleKeyDown);
@@ -36,7 +37,7 @@ class PlayerTank extends GameEntity {
 		//here add a websocket emit event also
 		socket.emit("client-moved", {
 			id: socket.id,
-			position: this._mesh.position,
+			position: { ...this._mesh.position, rotation: this._rotation },
 		});
 		switch (e.key) {
 			case "w":
@@ -102,6 +103,7 @@ class PlayerTank extends GameEntity {
 	public load = async () => {
 		const tankModel = ResourceManager.instance.getModel("tank");
 		if (!tankModel) {
+			console.log(tankModel);
 			throw "Unable to get tank model";
 		}
 
@@ -200,7 +202,7 @@ class PlayerTank extends GameEntity {
 		);
 
 		if (colliders.length) {
-			console.log(colliders);
+			// console.log(colliders);
 			return;
 		}
 
@@ -208,7 +210,7 @@ class PlayerTank extends GameEntity {
 
 		//update the collider as well
 		(this._collider as Sphere).center.add(computedMovements);
-		//make the camera follow the player tank
+		//make the camera follow the player
 		GameScene.instance.camera.position.set(
 			this._mesh.position.x,
 			this._mesh.position.y,

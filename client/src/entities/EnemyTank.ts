@@ -17,7 +17,7 @@ class EnemyTank extends GameEntity {
 	private _rotation: number;
 	private _moveSpeed = 1;
 
-	constructor(position: Vector3) {
+	constructor(position: Vector3, rotation: number = 1) {
 		super(position, "enemy");
 		//get a random starting rotation
 		this._rotation = Math.floor(Math.random() * Math.PI * 2);
